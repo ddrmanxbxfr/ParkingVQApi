@@ -25,6 +25,7 @@ var app = express();
 
 // Configure server
 app.configure(function () {
+    "use strict";
     //parses request body and populates request.body
     app.use(express.bodyParser());
 
@@ -48,6 +49,7 @@ function outCorsHeader(request, response) {
 }
 
 function arrondirWpy(roundloc, docToWorkOn) {
+    "use strict";
     var documentResult;
     if (roundloc != null) {
         var numToGo = parseInt(roundloc);
@@ -108,14 +110,14 @@ app.get('/api/parking/:radius/:lat/:lng', function (request, response) {
         if (!err) {
 
             var documentToWorkOn = geojson.preparerDocumentFeaturesFromCouchView(doc, request.params.id);
-            documentToSend = "We worked on it at least";
+            documentToSend = '{"status": "WorkedOnItButFailed"}';
             if (geojson.evaluerSiTypePoint(documentToWorkOn))
             // "this is really a point document"
                 documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocRadius(documentToWorkOn, request.params.radius, request.params.lat, request.params.lng));
             else
-                documentToSend = "This is not a point document. Can't do anything";
+                documentToSend = '{"status": "NotAPointDocument"}';
         } else {
-            documentToSend = 'could not find id!!';
+            documentToSend = '{"status": "CouldNotFindId"}';
         }
 
         response.send(documentToSend);
@@ -175,14 +177,14 @@ app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE', function (request, response)
         if (!err) {
 
             var documentToWorkOn = geojson.preparerDocumentFeaturesFromCouchView(doc, request.params.id);
-            documentToSend = "We worked on it at least";
+            documentToSend = '{"status": "WorkedOnItButFailed"}';
             if (geojson.evaluerSiTypePoint(documentToWorkOn) ||  geojson.evaluerSiTypePolygon(documentToWorkOn))
             // "this is really a point document"
                 documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBounds(documentToWorkOn, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE));
             else
-                documentToSend = "This is not a point document. Can't do anything";
+                documentToSend = '{"status": "NotAPointDocument"}';
         } else {
-            documentToSend = 'could not find id!!';
+            documentToSend = '{"status": "CouldNotFindId"}';
         }
 
         response.send(documentToSend);
@@ -193,5 +195,6 @@ app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE', function (request, response)
 //Start server
 var port = 4711;
 app.listen(port, function () {
+    "use strict";
     console.log('Express server listening on port %d in %s mode', port, app.settings.env);
 });
