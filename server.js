@@ -7,7 +7,7 @@ var application_root = __dirname,
     express = require('express'); //Web framework
 
 var nano = require('nano')('http://localhost:5984');
-var dbGeo_name = "apes_iwashere";
+var dbGeo_name = "parking_api";
 var dbGeo = nano.use(dbGeo_name)
 
 
@@ -175,7 +175,6 @@ app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE', function (request, response)
     }, function (err, doc) {
         var documentToSend;
         if (!err) {
-
             var documentToWorkOn = geojson.preparerDocumentFeaturesFromCouchView(doc, request.params.id);
             documentToSend = '{"status": "WorkedOnItButFailed"}';
             if (geojson.evaluerSiTypePoint(documentToWorkOn) ||  geojson.evaluerSiTypePolygon(documentToWorkOn))
