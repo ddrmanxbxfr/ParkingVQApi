@@ -59,7 +59,7 @@ function arrondirWpy(roundloc, docToWorkOn) {
 
 //Router
 /**
- * @api {get} /api/parking/:id/:radius/:lat/:lng Obtenir les document selon le périmètre
+ * @api {get} /api/parking/:radius/:lat/:lng Obtenir les document selon le périmètre
  * @apiName GetParkingDetailRadius
  * @apiGroup Parking
  *
@@ -96,7 +96,7 @@ function arrondirWpy(roundloc, docToWorkOn) {
  * }
  *
  */
-app.get('/api/parking/:id/:radius/:lat/:lng', function (request, response) {
+app.get('/api/parking/:radius/:lat/:lng', function (request, response) {
     outCorsHeader(request, response);
 
     dbGeo.view('nodejs', 'keys', {
@@ -124,7 +124,7 @@ app.get('/api/parking/:id/:radius/:lat/:lng', function (request, response) {
 
 
 /**
- * @api {get} /api/parking/:id/:latSW/:lngSW/:latNE/:lngNE Obtenir les document selon les bounds fournis.
+ * @api {get} /api/parking/:latSW/:lngSW/:latNE/:lngNE Obtenir les document selon les bounds fournis.
  * @apiName GetParkingDetailBounds
  * @apiGroup Parking
  *
@@ -164,10 +164,10 @@ app.get('/api/parking/:id/:radius/:lat/:lng', function (request, response) {
  * }
  *
  */
-app.get('/api/parking/:id/:latSW/:lngSW/:latNE/:lngNE', function (request, response) {
+app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE', function (request, response) {
     outCorsHeader(request, response);
 
-    dbGeo.view('datasets', request.params.id, {
+  dbGeo.view('nodejs', 'keys', {
         include_docs: true,
         reduce: false
     }, function (err, doc) {

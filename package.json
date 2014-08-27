@@ -1,7 +1,7 @@
 {
-    "name": "library-rest-api",
+    "name": "ParkingVQ_API",
     "version": "0.0.1",
-    "description": "A simple library REST api",
+    "description": "API qui fournit accès au dataset de parking specifique à la VQ",
     "dependencies": {
         "express": "~3.1.0",
         "nano": ">0.0.1"
