@@ -173,6 +173,7 @@ function loadWaypointInMemory() {
         var documentToSend;
         if (!err) {
             documentToWorkOnMemory = geojson.preparerDocumentFeaturesFromCouchView(doc);
+            console.log('Nb occurence dataset : ' + documentToWorkOnMemory.features.length);
             console.log('Finished loading waypoints in memory');
         } else {}
     });

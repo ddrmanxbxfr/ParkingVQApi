@@ -1,7 +1,7 @@
 [
   {
     "type": "get",
-    "url": "/api/parking/:id/:latSW/:lngSW/:latNE/:lngNE",
+    "url": "/api/parking/:latSW/:lngSW/:latNE/:lngNE",
     "title": "Obtenir les document selon les bounds fournis.",
     "name": "GetParkingDetailBounds",
     "group": "Parking",
@@ -79,7 +79,7 @@
   },
   {
     "type": "get",
-    "url": "/api/parking/:id/:radius/:lat/:lng",
+    "url": "/api/parking/:radius/:lat/:lng",
     "title": "Obtenir les document selon le périmètre",
     "name": "GetParkingDetailRadius",
     "group": "Parking",
