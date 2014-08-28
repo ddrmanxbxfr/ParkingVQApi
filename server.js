@@ -9,6 +9,7 @@ var application_root = __dirname,
 var nano = require('nano')('http://localhost:5984');
 var dbGeo_name = "parking_api";
 var dbGeo = nano.use(dbGeo_name)
+var documentToWorkOnMemory;
 
 
 // Parametres BD
@@ -100,28 +101,14 @@ function arrondirWpy(roundloc, docToWorkOn) {
  */
 app.get('/api/parking/:radius/:lat/:lng', function (request, response) {
     outCorsHeader(request, response);
+    documentToSend = '{"status": "WorkedOnItButFailed"}';
+    if (geojson.evaluerSiTypePoint(documentToWorkOnMemory))
+    // "this is really a point document"
+        documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocRadius(documentToWorkOnMemory, request.params.radius, request.params.lat, request.params.lng));
+    else
+        documentToSend = '{"status": "NotAPointDocument"}';
 
-    dbGeo.view('nodejs', 'keys', {
-        include_docs: true,
-        reduce: false,
-        key: request.params.id
-    }, function (err, doc) {
-        var documentToSend;
-        if (!err) {
-
-            var documentToWorkOn = geojson.preparerDocumentFeaturesFromCouchView(doc, request.params.id);
-            documentToSend = '{"status": "WorkedOnItButFailed"}';
-            if (geojson.evaluerSiTypePoint(documentToWorkOn))
-            // "this is really a point document"
-                documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocRadius(documentToWorkOn, request.params.radius, request.params.lat, request.params.lng));
-            else
-                documentToSend = '{"status": "NotAPointDocument"}';
-        } else {
-            documentToSend = '{"status": "CouldNotFindId"}';
-        }
-
-        response.send(documentToSend);
-    });
+    response.send(documentToSend);
 });
 
 
@@ -168,32 +155,34 @@ app.get('/api/parking/:radius/:lat/:lng', function (request, response) {
  */
 app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE', function (request, response) {
     outCorsHeader(request, response);
+    var documentToSend;
+    documentToSend = '{"status": "WorkedOnItButFailed"}';
+    if (geojson.evaluerSiTypePoint(documentToWorkOnMemory) ||  geojson.evaluerSiTypePolygon(documentToWorkOnMemory))
+    // "this is really a point document"
+        documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBounds(documentToWorkOnMemory, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE));
 
-  dbGeo.view('nodejs', 'keys', {
+    response.send(documentToSend);
+});
+
+
+function loadWaypointInMemory() {
+    dbGeo.view('nodejs', 'keys', {
         include_docs: true,
         reduce: false
     }, function (err, doc) {
         var documentToSend;
         if (!err) {
-            var documentToWorkOn = geojson.preparerDocumentFeaturesFromCouchView(doc, request.params.id);
-            documentToSend = '{"status": "WorkedOnItButFailed"}';
-            if (geojson.evaluerSiTypePoint(documentToWorkOn) ||  geojson.evaluerSiTypePolygon(documentToWorkOn))
-            // "this is really a point document"
-                documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBounds(documentToWorkOn, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE));
-            else
-                documentToSend = '{"status": "NotAPointDocument"}';
-        } else {
-            documentToSend = '{"status": "CouldNotFindId"}';
-        }
-
-        response.send(documentToSend);
+            documentToWorkOnMemory = geojson.preparerDocumentFeaturesFromCouchView(doc);
+            console.log('Finished loading waypoints in memory');
+        } else {}
     });
-});
+}
 
 
 //Start server
 var port = 4711;
 app.listen(port, function () {
     "use strict";
+    loadWaypointInMemory();
     console.log('Express server listening on port %d in %s mode', port, app.settings.env);
 });
