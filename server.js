@@ -36,11 +36,14 @@ app.configure(function () {
     //perform route lookup based on url and HTTP method
     app.use(app.router);
 
+    // Compress if we can !
+    app.use(express.compress());
+
     //Show all errors in development
-    app.use(express.errorHandler({
+    /*app.use(express.errorHandler({
         dumpExceptions: true,
         showStack: true
-    }));
+    })); */
 });
 
 function outCorsHeader(request, response) {
