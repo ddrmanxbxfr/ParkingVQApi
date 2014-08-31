@@ -12,15 +12,6 @@ var dbGeo = nano.use(dbGeo_name)
 var documentToWorkOnMemory;
 
 
-// Parametres BD
-var per_page = 10,
-    params = {
-        include_docs: true,
-        limit: per_page,
-        descending: true
-    };
-
-
 //Create server
 var app = express();
 
@@ -38,6 +29,9 @@ app.configure(function () {
 
     // Compress if we can !
     app.use(express.compress());
+
+    // Set json spaces at 0 !
+    app.set('json spaces', 0);
 
     //Show all errors in development
     /*app.use(express.errorHandler({
@@ -111,7 +105,7 @@ app.get('/api/parking/:radius/:lat/:lng', function (request, response) {
     else
         documentToSend = '{"status": "NotAPointDocument"}';
 
-    response.send(documentToSend);
+    response.json(documentToSend);
 });
 
 
@@ -164,7 +158,7 @@ app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE', function (request, response)
     // "this is really a point document"
         documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBounds(documentToWorkOnMemory, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE));
 
-    response.send(documentToSend);
+    response.json(documentToSend);
 });
 
 
