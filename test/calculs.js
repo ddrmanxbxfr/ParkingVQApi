@@ -32,6 +32,22 @@ describe('Presence d\'un point dans le rayon', function () {
 });
 
 describe('Calculer le point centrale d\'un rectangle', function () {
+    var pointCentral;
+    before(function (done) {
+        pointCentral = calculs.calculerPointCentreRectangle(0, 10, 0, 10);
+        done();
+    })
 
+    it('should have lat and lng properties', function () {
+        pointCentral.should.have.property("lat").and.be.a.Number;
+        pointCentral.should.have.property("lng").and.be.a.Number;
+    })
 
+    it('Lng for 0,0-10,10 rectangle should be 5', function () {
+        pointCentral.lng.should.be.exactly(5).and.be.a.Number;
+    });
+
+    it('Lat for 0,0-10,10 rectangle should be 5', function () {
+        pointCentral.lat.should.be.exactly(5).and.be.a.Number;
+    });
 });
