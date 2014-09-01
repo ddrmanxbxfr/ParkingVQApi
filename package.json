@@ -1,10 +1,14 @@
 {
-  "name": "ParkingVQ_API",
-  "version": "0.0.1",
-  "description": "API qui fournit accès au dataset de parking specifique à la VQ",
-  "dependencies": {
-    "cluster": "^0.7.7",
-    "express": "~3.1.0",
-    "nano": ">0.0.1"
-  }
+    "name": "ParkingVQ_API",
+    "version": "0.0.1",
+    "description": "API qui fournit accès au dataset de parking specifique à la VQ",
+    "dependencies": {
+        "cluster": "^0.7.7",
+        "express": "~3.1.0",
+        "nano": ">0.0.1"
+    },
+    "devDependencies": {
+        "should": "^4.0.4",
+        "mocha": "^1.21.4",
+    }
 }
