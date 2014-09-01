@@ -51,3 +51,28 @@ describe('Calculer le point centrale d\'un rectangle', function () {
         pointCentral.lat.should.be.exactly(5).and.be.a.Number;
     });
 });
+
+
+describe('Verifier presence d\'un point dans polygone', function () {
+    var pointEnDehorsDuPoly, pointALinterieurDuPoly;
+
+    before(function (done) {
+        // Definition du polygone avec 0,0,10,10
+        var polyTest = [[0.0, 0.0], [10.0, 0.0], [10.0, 10.0],
+               [0.0, 10.0], [0.0, 0.0]];
+        var lngInside =5
+        var latInside = 5;
+
+        pointEnDehorsDuPoly = calculs.isPointInPoly(polyTest, 15, 15);
+        pointALinterieurDuPoly = calculs.isPointInPoly(polyTest, latInside, lngInside);
+        done();
+    })
+
+    it('should have point outside poly', function () {
+        pointEnDehorsDuPoly.should.be.exactly(false).and.be.a.Boolean;
+    })
+
+    it('should have point inside poly', function () {
+        pointALinterieurDuPoly.should.be.exactly(true).and.be.a.Boolean;
+    })
+});
