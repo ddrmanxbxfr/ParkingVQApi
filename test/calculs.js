@@ -58,9 +58,12 @@ describe('Verifier presence d\'un point dans polygone', function () {
 
     before(function (done) {
         // Definition du polygone avec 0,0,10,10
-        var polyTest = [[0.0, 0.0], [10.0, 0.0], [10.0, 10.0],
-               [0.0, 10.0], [0.0, 0.0]];
-        var lngInside =5
+        var polyTest = [[0.0, 0.0],
+                        [10.0, 0.0],
+                        [10.0, 10.0],
+                        [0.0, 10.0],
+                        [0.0, 0.0]];
+        var lngInside = 5
         var latInside = 5;
 
         pointEnDehorsDuPoly = calculs.isPointInPoly(polyTest, 15, 15);
@@ -74,5 +77,40 @@ describe('Verifier presence d\'un point dans polygone', function () {
 
     it('should have point inside poly', function () {
         pointALinterieurDuPoly.should.be.exactly(true).and.be.a.Boolean;
+    })
+});
+
+describe('Verifier presence d\'un polygone dans un polygone', function () {
+    var isPolyInside, isPolyOutside, isPolyPartiallyInsideFromSouth, isPolyPartiallyInsideFromNorth;
+
+    before(function (done) {
+        // Definition du polygone avec 0,0,10,10
+        var polyTest = [[0.0, 0.0],
+                        [10.0, 0.0],
+                        [10.0, 10.0],
+                        [0.0, 10.0],
+                        [0.0, 0.0]];
+
+        isPolyInside = calculs.isPolyInBounds(polyTest, 4, 4, 5, 5);
+        isPolyOutside = calculs.isPolyInBounds(polyTest, 20, 20, 15, 15);
+        isPolyPartiallyInsideFromNorth = calculs.isPolyInBounds(polyTest, -10,-10,0.2,0.2);
+        isPolyPartiallyInsideFromSouth = calculs.isPolyInBounds(polyTest,9,9,20,20);
+        done();
+    })
+
+    it('should have poly inside bounds', function () {
+        isPolyInside.should.be.exactly(true).and.be.a.Boolean;
+    })
+
+    it('should have poly outside bounds', function () {
+        isPolyOutside.should.be.exactly(false).and.be.a.Boolean;
+    })
+
+    it('should have poly inside from north east', function() {
+      isPolyPartiallyInsideFromNorth.should.be.exactly(true).and.be.a.Boolean;
+    })
+
+    it('should have poly inside from south west', function() {
+      isPolyPartiallyInsideFromSouth.should.be.exactly(true).and.be.a.Boolean;
     })
 });
