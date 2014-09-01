@@ -15,18 +15,23 @@ describe('Calculer la distance entre 2 points', function () {
 
 
 describe('Presence d\'un point dans le rayon', function () {
-   var rayonPlusPetitQueDistance, rayonPlusGrandQueDistance;
+    var rayonPlusPetitQueDistance, rayonPlusGrandQueDistance;
     before(function (done) {
         rayonPlusPetitQueDistance = calculs.isPointInRadius(1500, 10, 10, 20, 20);
         rayonPlusGrandQueDistance = calculs.isPointInRadius(2000, 10, 10, 20, 20);
-        done();  
+        done();
     })
-    
-    it('should not be in radius if rad is smaller than distance', function() {
+
+    it('should not be in radius if rad is smaller than distance', function () {
         rayonPlusPetitQueDistance.should.be.exactly(false).and.be.a.Boolean;
     });
-    
-    it('should be in radius if rad is bigger than distance', function() {
+
+    it('should be in radius if rad is bigger than distance', function () {
         rayonPlusGrandQueDistance.should.be.exactly(true).and.be.a.Boolean;
     });
+});
+
+describe('Calculer le point centrale d\'un rectangle', function () {
+
+
 });
