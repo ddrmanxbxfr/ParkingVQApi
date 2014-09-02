@@ -239,7 +239,7 @@ describe('Preparation des documents de couchdb', function () {
 
 
 describe('Retirer les waypoints trop proche selon decimal', function () {
-    var withTwoPropsUndefined, withoutGeometryProp, withFeaturesUndefined, withFeaturesEmpty, withoutCoordinatesProp;
+    var withTwoPropsUndefined, withoutGeometryProp, withFeaturesUndefined, withFeaturesEmpty, withoutCoordinatesProp, withInvalidDataType;
     before(function (done) {
         var mockData;
         withTwoPropsUndefined = geojson.retirerWaypointTropProche(undefined, undefined);
@@ -270,6 +270,28 @@ describe('Retirer les waypoints trop proche selon decimal', function () {
             geometry: {}
         });
         withoutCoordinatesProp = geojson.retirerWaypointTropProche(mockData, 10)
+
+        mockData.features.length = 0;
+
+        mockData.features.push({
+            geometry: {
+                coordinates: ["AA", 0]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                coordinates: [0, "BB"]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                coordinates: ["ZZ", "CC"]
+            }
+        });
+
+        withInvalidDataType = geojson.retirerWaypointTropProche(mockData, 10);
 
         done();
     })
@@ -314,5 +336,12 @@ describe('Retirer les waypoints trop proche selon decimal', function () {
         withoutCoordinatesProp.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         withoutCoordinatesProp.should.have.property("features");
         withoutCoordinatesProp.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+    it('should be 0 features when datatype is invalid', function () {
+        withInvalidDataType.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        withInvalidDataType.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        withInvalidDataType.should.have.property("features");
+        withInvalidDataType.features.length.should.be.exactly(0).and.be.a.Number;
     });
 })
