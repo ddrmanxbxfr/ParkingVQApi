@@ -383,3 +383,44 @@ describe('Retirer les waypoints trop proche selon decimal', function () {
         withDistinctNumber.features[1].geometry.coordinates[1].should.be.exactly(10.554).and.be.a.Number;
     });
 })
+
+
+describe('Generate Geojson document from bounds', function () {
+    var itShouldBeNormalRun;
+    before(function (done) {
+
+        mockData = {
+            "name": "ParkingAPI",
+            "type": "FeatureCollection",
+            "features": []
+        };
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [15,15]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [14, 15]
+            }
+        });
+
+        itShouldBeNormalRun = geojson.generateGeoJsonDocBounds(mockData, 10, 10, 20, 20);
+        done();
+    })
+
+    it('should be 2 features in document', function () {
+        itShouldBeNormalRun.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldBeNormalRun.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldBeNormalRun.should.have.property("features");
+        itShouldBeNormalRun.features.length.should.be.exactly(2).and.be.a.Number;
+        itShouldBeNormalRun.features[0].geometry.coordinates[0].should.be.exactly(15).and.be.a.Number;
+        itShouldBeNormalRun.features[0].geometry.coordinates[1].should.be.exactly(15).and.be.a.Number;
+        itShouldBeNormalRun.features[1].geometry.coordinates[0].should.be.exactly(14).and.be.a.Number;
+        itShouldBeNormalRun.features[1].geometry.coordinates[1].should.be.exactly(15).and.be.a.Number;
+    });
+})
