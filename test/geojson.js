@@ -136,18 +136,23 @@ describe('Verifier Si type polygon', function () {
 });
 
 describe('Preparation des documents de couchdb', function () {
-    var isWithoutDocProp, isSupposedToBeValid, isWithoutRowsArray, isRowsEmpty;
+    var isWithoutDocProp, isSupposedToBeValid, isWithoutRowsArray, isRowsEmpty, isUndefined;
     before(function (done) {
 
         //doc.rows[iCpt].doc
+        isUndefined = geojson.preparerDocumentFeaturesFromCouchView(undefined);
+        var mockDocument = {}
         isWithoutRowsArray = geojson.preparerDocumentFeaturesFromCouchView(mockDocument);
 
         var mockDocument = {
             rows: []
         }
 
+        isRowsEmpty = geojson.preparerDocumentFeaturesFromCouchView(mockDocument);
+
         mockDocument.rows.push({});
 
+        isWithoutDocProp = geojson.preparerDocumentFeaturesFromCouchView(mockDocument);
 
         mockDocument.rows.push({
             doc: {
@@ -173,10 +178,32 @@ describe('Preparation des documents de couchdb', function () {
         done();
     });
 
+    it('should have empty features when doc is undefined', function () {
+        isUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        isUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        isUndefined.should.have.property("features");
+        isUndefined.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
     it('should have empty features when rows is undefined', function () {
         isWithoutRowsArray.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
         isWithoutRowsArray.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         isWithoutRowsArray.should.have.property("features");
         isWithoutRowsArray.features.length.should.be.exactly(0).and.be.a.Number;
     });
+
+    it('should have empty features when rows are empty', function () {
+        isRowsEmpty.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        isRowsEmpty.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        isRowsEmpty.should.have.property("features");
+        isRowsEmpty.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+    it('should have empty features when rows don\'t have valid object', function () {
+        isWithoutDocProp.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        isWithoutDocProp.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        isWithoutDocProp.should.have.property("features");
+        isWithoutDocProp.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
 });
