@@ -386,7 +386,7 @@ describe('Retirer les waypoints trop proche selon decimal', function () {
 
 
 describe('Generate Geojson document from bounds', function () {
-    var itShouldHavePolyInside,itShouldNotHavePolyCoordsInvalid, itShouldBeNormalRun, itShouldHaveFeaturesUndefined, itShouldHaveParmsUndefined, itShouldBeEmptyAsUndefinedCoords;
+    var itShouldHavePolyInside, itShouldNotHavePolyCoordsInvalid, itShouldBeNormalRun, itShouldHaveFeaturesUndefined, itShouldHaveParmsUndefined, itShouldBeEmptyAsUndefinedCoords;
     before(function (done) {
         var mockData, mockPolygon;
 
@@ -510,12 +510,12 @@ describe('Generate Geojson document from bounds', function () {
             }
         });
 
-        itShouldNotHavePolyCoordsInvalid = geojson.generateGeoJsonDocBounds(mockdata, -20, -20, 20, 20);
+        itShouldNotHavePolyCoordsInvalid = geojson.generateGeoJsonDocBounds(mockData, -20, -20, 20, 20);
 
         done();
     })
 
-    it('should be 2 features in document', function () {
+    it('should be 2 points in document', function () {
         itShouldBeNormalRun.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
         itShouldBeNormalRun.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         itShouldBeNormalRun.should.have.property("features");
@@ -526,7 +526,7 @@ describe('Generate Geojson document from bounds', function () {
         itShouldBeNormalRun.features[1].geometry.coordinates[1].should.be.exactly(15).and.be.a.Number;
     });
 
-    it('should be 0 features as features was undefined', function () {
+    it('should be 0 points as features was undefined', function () {
         itShouldHaveFeaturesUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
         itShouldHaveFeaturesUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         itShouldHaveFeaturesUndefined.should.have.property("features");
@@ -534,14 +534,14 @@ describe('Generate Geojson document from bounds', function () {
     });
 
 
-    it('should be 0 features as parms were undefined', function () {
+    it('should be 0 points as parms were undefined', function () {
         itShouldHaveParmsUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
         itShouldHaveParmsUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         itShouldHaveParmsUndefined.should.have.property("features");
         itShouldHaveParmsUndefined.features.length.should.be.exactly(0).and.be.a.Number;
     });
 
-    it('should be 0 features as coords were undefined', function () {
+    it('should be 0 points as coords were undefined', function () {
         itShouldBeEmptyAsUndefinedCoords.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
         itShouldBeEmptyAsUndefinedCoords.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         itShouldBeEmptyAsUndefinedCoords.should.have.property("features");
@@ -553,5 +553,12 @@ describe('Generate Geojson document from bounds', function () {
         itShouldHavePolyInside.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         itShouldHavePolyInside.should.have.property("features");
         itShouldHavePolyInside.features.length.should.be.exactly(4).and.be.a.Number;
+    });
+
+    it('should be 0 polygon as coords were undefined', function () {
+        itShouldNotHavePolyCoordsInvalid.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldNotHavePolyCoordsInvalid.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldNotHavePolyCoordsInvalid.should.have.property("features");
+        itShouldNotHavePolyCoordsInvalid.features.length.should.be.exactly(0).and.be.a.Number;
     });
 })
