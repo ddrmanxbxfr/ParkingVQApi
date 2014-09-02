@@ -239,14 +239,32 @@ describe('Preparation des documents de couchdb', function () {
 
 
 describe('Retirer les waypoints trop proche selon decimal', function () {
-    var withTwoPropsUndefined;
+    var withTwoPropsUndefined, withLongerDecimal, withFeaturesUndefined, withFeaturesEmpty;
     before(function (done) {
+        var mockData;
         withTwoPropsUndefined = geojson.retirerWaypointTropProche(undefined, undefined);
+
+        mockData = {
+            "name": "ParkingAPI",
+            "type": "FeatureCollection"
+        };
+
+        withFeaturesUndefined = geojson.retirerWaypointTropProche(mockData, 10);
+
+        done();
     })
+
     it('should return an empty doc when props are undefined', function () {
         withTwoPropsUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
         withTwoPropsUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         withTwoPropsUndefined.should.have.property("features");
         withTwoPropsUndefined.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+    it('should have valid doc with 0 features when features is undefined', function () {
+        withFeaturesUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        withFeaturesUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        withFeaturesUndefined.should.have.property("features");
+        withFeaturesUndefined.features.length.should.be.exactly(0).and.be.a.Number;
     });
 })
