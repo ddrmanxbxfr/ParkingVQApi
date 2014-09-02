@@ -239,7 +239,7 @@ describe('Preparation des documents de couchdb', function () {
 
 
 describe('Retirer les waypoints trop proche selon decimal', function () {
-    var withTwoPropsUndefined, withoutGeometryProp, withFeaturesUndefined, withFeaturesEmpty, withoutCoordinatesProp, withInvalidDataType;
+    var withTwoPropsUndefined, withoutGeometryProp, withFeaturesUndefined, withFeaturesEmpty, withoutCoordinatesProp, withInvalidDataType, withNumberRounded, withDistinctNumber;
     before(function (done) {
         var mockData;
         withTwoPropsUndefined = geojson.retirerWaypointTropProche(undefined, undefined);
@@ -293,6 +293,24 @@ describe('Retirer les waypoints trop proche selon decimal', function () {
 
         withInvalidDataType = geojson.retirerWaypointTropProche(mockData, 10);
 
+        mockData.features.length = 0;
+
+        mockData.features.push({
+            geometry: {
+                coordinates: [10.555, 10.555]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                coordinates: [10.554, 10.554]
+            }
+        });
+
+        withNumberRounded = geojson.retirerWaypointTropProche(mockData, 2);
+
+        withDistinctNumber = geojson.retirerWaypointTropProche(mockData, 5);
+
         done();
     })
 
@@ -343,5 +361,25 @@ describe('Retirer les waypoints trop proche selon decimal', function () {
         withInvalidDataType.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         withInvalidDataType.should.have.property("features");
         withInvalidDataType.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+    it('should be 1 features the others were dupes because length was 3 and round 2', function () {
+        withNumberRounded.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        withNumberRounded.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        withNumberRounded.should.have.property("features");
+        withNumberRounded.features.length.should.be.exactly(1).and.be.a.Number;
+        withNumberRounded.features[0].geometry.coordinates[0].should.be.exactly(10.555).and.be.a.Number;
+        withNumberRounded.features[0].geometry.coordinates[1].should.be.exactly(10.555).and.be.a.Number;
+    });
+
+    it('should be 2 features the others were rounded not rounded as length was 3 and round 5', function () {
+        withDistinctNumber.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        withDistinctNumber.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        withDistinctNumber.should.have.property("features");
+        withDistinctNumber.features.length.should.be.exactly(2).and.be.a.Number;
+        withDistinctNumber.features[0].geometry.coordinates[0].should.be.exactly(10.555).and.be.a.Number;
+        withDistinctNumber.features[0].geometry.coordinates[1].should.be.exactly(10.555).and.be.a.Number;
+        withDistinctNumber.features[1].geometry.coordinates[0].should.be.exactly(10.554).and.be.a.Number;
+        withDistinctNumber.features[1].geometry.coordinates[1].should.be.exactly(10.554).and.be.a.Number;
     });
 })
