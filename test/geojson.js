@@ -239,7 +239,7 @@ describe('Preparation des documents de couchdb', function () {
 
 
 describe('Retirer les waypoints trop proche selon decimal', function () {
-    var withTwoPropsUndefined, withLongerDecimal, withFeaturesUndefined, withFeaturesEmpty;
+    var withTwoPropsUndefined, withoutGeometryProp, withFeaturesUndefined, withFeaturesEmpty, withoutCoordinatesProp;
     before(function (done) {
         var mockData;
         withTwoPropsUndefined = geojson.retirerWaypointTropProche(undefined, undefined);
@@ -259,27 +259,53 @@ describe('Retirer les waypoints trop proche selon decimal', function () {
 
         withFeaturesEmpty = geojson.retirerWaypointTropProche(mockData, 10);
 
+        mockData.features.push({});
+        mockData.features.push({});
+        withoutGeometryProp = geojson.retirerWaypointTropProche(mockData, 10);
+
+        mockData.features.push({
+            geometry: {}
+        });
+        mockData.features.push({
+            geometry: {}
+        });
+        withoutCoordinatesProp = geojson.retirerWaypointTropProche(mockData, 10)
+
         done();
     })
 
-    it('should return an empty doc when props are undefined', function () {
+    it('should be 0 features when props are undefined', function () {
         withTwoPropsUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
         withTwoPropsUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         withTwoPropsUndefined.should.have.property("features");
         withTwoPropsUndefined.features.length.should.be.exactly(0).and.be.a.Number;
     });
 
-    it('should have valid doc with 0 features when features is undefined', function () {
+    it('should be 0 features when features is undefined', function () {
         withFeaturesUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
         withFeaturesUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         withFeaturesUndefined.should.have.property("features");
         withFeaturesUndefined.features.length.should.be.exactly(0).and.be.a.Number;
     });
 
-    it('should have valid doc with 0 features when features length is 0', function () {
+    it('should be 0 features when features length is 0', function () {
         withFeaturesEmpty.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
         withFeaturesEmpty.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         withFeaturesEmpty.should.have.property("features");
         withFeaturesEmpty.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+    it('should be 0 features when features length is 0', function () {
+        withFeaturesEmpty.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        withFeaturesEmpty.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        withFeaturesEmpty.should.have.property("features");
+        withFeaturesEmpty.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+    it('should be 0 features when geometry in objects are undefined', function () {
+        withoutGeometryProp.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        withoutGeometryProp.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        withoutGeometryProp.should.have.property("features");
+        withoutGeometryProp.features.length.should.be.exactly(0).and.be.a.Number;
     });
 })
