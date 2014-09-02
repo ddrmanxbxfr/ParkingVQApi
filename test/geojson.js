@@ -41,11 +41,19 @@ describe('Verifier Si type point', function () {
         done();
     });
 
-    it('should have returned false when there\'s no props', function () {
+    it('should be false when there\'s no props', function () {
         hasNoProps.should.be.exactly(false).and.be.a.Boolean;
     });
 
-    it('should have returned false when the array is empty', function () {
+    it('should be false when the array is empty', function () {
         isEmpty.should.be.exactly(false).and.be.a.Boolean;
     });
+
+    it('should be false when there\'s no point element in array', function() {
+        isWithoutPoint.should.be.exactly(false).and.be.a.Boolean;
+    })
+
+    it('should be true when there\'s point', function() {
+        isWithPoint.should.be.exactly(true).and.be.a.Boolean;
+    })
 });
