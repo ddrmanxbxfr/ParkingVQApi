@@ -386,8 +386,17 @@ describe('Retirer les waypoints trop proche selon decimal', function () {
 
 
 describe('Generate Geojson document from bounds', function () {
-    var itShouldBeNormalRun;
+    var itShouldBeNormalRun, itShouldHaveFeaturesUndefined;
     before(function (done) {
+        var mockData;
+
+        mockData = {
+            "name": "ParkingAPI",
+            "type": "FeatureCollection"
+        };
+
+        itShouldHaveFeaturesUndefined = geojson.generateGeoJsonDocBounds(mockData, 10, 10, 20, 20);
+
 
         mockData = {
             "name": "ParkingAPI",
@@ -398,7 +407,7 @@ describe('Generate Geojson document from bounds', function () {
         mockData.features.push({
             geometry: {
                 type: "Point",
-                coordinates: [15,15]
+                coordinates: [15, 15]
             }
         });
 
@@ -410,6 +419,7 @@ describe('Generate Geojson document from bounds', function () {
         });
 
         itShouldBeNormalRun = geojson.generateGeoJsonDocBounds(mockData, 10, 10, 20, 20);
+
         done();
     })
 
@@ -422,5 +432,14 @@ describe('Generate Geojson document from bounds', function () {
         itShouldBeNormalRun.features[0].geometry.coordinates[1].should.be.exactly(15).and.be.a.Number;
         itShouldBeNormalRun.features[1].geometry.coordinates[0].should.be.exactly(14).and.be.a.Number;
         itShouldBeNormalRun.features[1].geometry.coordinates[1].should.be.exactly(15).and.be.a.Number;
+    });
+
+
+
+    it('should be 0 features as features was undefined', function () {
+        itShouldHaveFeaturesUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldHaveFeaturesUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldHaveFeaturesUndefined.should.have.property("features");
+        itShouldHaveFeaturesUndefined.features.length.should.be.exactly(0).and.be.a.Number;
     });
 })
