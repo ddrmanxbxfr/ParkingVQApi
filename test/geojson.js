@@ -236,3 +236,17 @@ describe('Preparation des documents de couchdb', function () {
     });
 
 });
+
+
+describe('Retirer les waypoints trop proche selon decimal', function () {
+    var withTwoPropsUndefined;
+    before(function (done) {
+        withTwoPropsUndefined = geojson.retirerWaypointTropProche(undefined, undefined);
+    })
+    it('should return an empty doc when props are undefined', function () {
+        withTwoPropsUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        withTwoPropsUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        withTwoPropsUndefined.should.have.property("features");
+        withTwoPropsUndefined.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+})
