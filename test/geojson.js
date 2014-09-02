@@ -386,9 +386,9 @@ describe('Retirer les waypoints trop proche selon decimal', function () {
 
 
 describe('Generate Geojson document from bounds', function () {
-    var itShouldBeNormalRun, itShouldHaveFeaturesUndefined, itShouldHaveParmsUndefined, itShouldBeEmptyAsUndefinedCoords;
+    var itShouldHavePolyInside,itShouldNotHavePolyCoordsInvalid, itShouldBeNormalRun, itShouldHaveFeaturesUndefined, itShouldHaveParmsUndefined, itShouldBeEmptyAsUndefinedCoords;
     before(function (done) {
-        var mockData;
+        var mockData, mockPolygon;
 
         itShouldHaveParmsUndefined = geojson.generateGeoJsonDocBounds(undefined,
             undefined,
@@ -404,7 +404,7 @@ describe('Generate Geojson document from bounds', function () {
 
         itShouldHaveFeaturesUndefined = geojson.generateGeoJsonDocBounds(mockData, 10, 10, 20, 20);
 
-
+        // ** Test relies au points ! **
         mockData = {
             "name": "ParkingAPI",
             "type": "FeatureCollection",
@@ -444,6 +444,74 @@ describe('Generate Geojson document from bounds', function () {
 
         itShouldBeEmptyAsUndefinedCoords = geojson.generateGeoJsonDocBounds(mockData, 10, 10, 20, 20);
 
+        // Test relies au Polygones !
+
+        mockPolygon = [[[0.0, 0.0],
+                        [10.0, 0.0],
+                        [10.0, 10.0],
+                        [0.0, 10.0],
+                        [0.0, 0.0]]];
+
+        mockData.features.length = 0;
+        mockData.features.push({
+            geometry: {
+                type: "Polygon",
+                coordinates: mockPolygon
+            }
+        });
+
+        // partiellement a l'interieur du nord est.
+        mockData.features.push({
+            geometry: {
+                type: "Polygon",
+                coordinates: [[[-30, -30],
+                        [10.0, -30],
+                        [10.0, 10.0],
+                        [-30, 10.0],
+                        [-30, -30]]]
+            }
+        });
+
+        // Bigger than bounds
+        mockData.features.push({
+            geometry: {
+                type: "Polygon",
+                coordinates: [[[-30, -30],
+                        [40, -30],
+                        [40, 40],
+                        [-30, 40],
+                        [-30, -30]]]
+            }
+        });
+
+        // Partiellement a l'interieur du sud ouest.
+        mockData.features.push({
+            geometry: {
+                type: "Polygon",
+                coordinates: [[[19, 19],
+                        [40, 19],
+                        [40, 40],
+                        [19, 40],
+                        [19, 19]]]
+            }
+        });
+
+        itShouldHavePolyInside = geojson.generateGeoJsonDocBounds(mockData, -20, -20, 20, 20);
+
+        mockData.features.length = 0;
+        mockData.features.push({
+            geometry: {
+                type: "Polygon",
+                coordinates: [[[19, undefined],
+                        [undefined, 19],
+                        [40, undefined],
+                        [19, 40],
+                        [undefined, 19]]]
+            }
+        });
+
+        itShouldNotHavePolyCoordsInvalid = geojson.generateGeoJsonDocBounds(mockdata, -20, -20, 20, 20);
+
         done();
     })
 
@@ -478,5 +546,12 @@ describe('Generate Geojson document from bounds', function () {
         itShouldBeEmptyAsUndefinedCoords.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         itShouldBeEmptyAsUndefinedCoords.should.have.property("features");
         itShouldBeEmptyAsUndefinedCoords.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+    it('should be 4 polygon inside the bounds', function () {
+        itShouldHavePolyInside.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldHavePolyInside.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldHavePolyInside.should.have.property("features");
+        itShouldHavePolyInside.features.length.should.be.exactly(4).and.be.a.Number;
     });
 })
