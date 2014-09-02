@@ -16,26 +16,36 @@ describe('Verifier Si type point', function () {
 
 
         // Adding invalid elements
-        geojsonTest.features.push({zz: "yo"});
+        geojsonTest.features.push({
+            zz: "yo"
+        });
         withInvalidObject = geojson.evaluerSiTypePoint(geojsonTest);
 
         // Clearing then adding reals items
         geojsonTest.features.length = 0;
         geojsonTest.features.push({
-            geometry: {type: "ZZZZ" }
+            geometry: {
+                type: "ZZZZ"
+            }
         });
         geojsonTest.features.push({
-            geometry: {type: "ZZZZ" }
+            geometry: {
+                type: "ZZZZ"
+            }
         });
         geojsonTest.features.push({
-            geometry: {type: "ZZZZ" }
+            geometry: {
+                type: "ZZZZ"
+            }
         });
 
         isWithoutPoint = geojson.evaluerSiTypePoint(geojsonTest);
 
         // Adding with point
         geojsonTest.features.push({
-            geometry: {type: "Point" }
+            geometry: {
+                type: "Point"
+            }
         });
         isWithPoint = geojson.evaluerSiTypePoint(geojsonTest);
         done();
@@ -49,11 +59,11 @@ describe('Verifier Si type point', function () {
         isEmpty.should.be.exactly(false).and.be.a.Boolean;
     });
 
-    it('should be false when there\'s no point element in array', function() {
+    it('should be false when there\'s no point element in array', function () {
         isWithoutPoint.should.be.exactly(false).and.be.a.Boolean;
     })
 
-    it('should be true when there\'s point', function() {
+    it('should be true when there\'s point', function () {
         isWithPoint.should.be.exactly(true).and.be.a.Boolean;
     })
 });
