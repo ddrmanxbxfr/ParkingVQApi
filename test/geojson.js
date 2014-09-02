@@ -601,7 +601,7 @@ describe('Generate Geojson document from radius', function () {
             }
         });
 
-        itShouldBeNormalRun = geojson.generateGeoJsonDocRadius(mockData, 10, 15, 15);
+        itShouldBeNormalRun = geojson.generateGeoJsonDocRadius(mockData, 1000, 15, 15);
 
         mockData.features.length = 0;
         mockData.features.push({

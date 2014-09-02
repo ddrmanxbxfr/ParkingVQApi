@@ -15,10 +15,11 @@ describe('Calculer la distance entre 2 points', function () {
 
 
 describe('Presence d\'un point dans le rayon', function () {
-    var rayonPlusPetitQueDistance, rayonPlusGrandQueDistance;
+    var rayonPlusPetitQueDistance, rayonPlusGrandQueDistance, pointSurLeMemeRayon;
     before(function (done) {
         rayonPlusPetitQueDistance = calculs.isPointInRadius(1500, 10, 10, 20, 20);
         rayonPlusGrandQueDistance = calculs.isPointInRadius(2000, 10, 10, 20, 20);
+        pointSurLeMemeRayon = calculs.isPointInRadius(10,10,10,10,10);
         done();
     })
 
@@ -28,6 +29,10 @@ describe('Presence d\'un point dans le rayon', function () {
 
     it('should be in radius if rad is bigger than distance', function () {
         rayonPlusGrandQueDistance.should.be.exactly(true).and.be.a.Boolean;
+    });
+
+     it('should be in radius if point is at the same place than src loc', function () {
+        pointSurLeMemeRayon.should.be.exactly(true).and.be.a.Boolean;
     });
 });
 
