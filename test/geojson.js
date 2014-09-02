@@ -135,3 +135,48 @@ describe('Verifier Si type polygon', function () {
     })
 });
 
+describe('Preparation des documents de couchdb', function () {
+    var isWithoutDocProp, isSupposedToBeValid, isWithoutRowsArray, isRowsEmpty;
+    before(function (done) {
+
+        //doc.rows[iCpt].doc
+        isWithoutRowsArray = geojson.preparerDocumentFeaturesFromCouchView(mockDocument);
+
+        var mockDocument = {
+            rows: []
+        }
+
+        mockDocument.rows.push({});
+
+
+        mockDocument.rows.push({
+            doc: {
+                _id: 1111,
+                _rev: 3333,
+                tst: "yo"
+            }
+        });
+
+        mockDocument.rows.push({
+            doc: {
+                _id: 1111,
+                tst: "yo"
+            }
+        });
+        mockDocument.rows.push({
+            doc: {
+                _rev: 3333,
+                tst: "yo"
+            }
+        });
+
+        done();
+    });
+
+    it('should have empty features when rows is undefined', function () {
+        isWithoutRowsArray.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        isWithoutRowsArray.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        isWithoutRowsArray.should.have.property("features");
+        isWithoutRowsArray.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+});
