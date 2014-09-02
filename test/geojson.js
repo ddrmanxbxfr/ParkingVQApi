@@ -562,3 +562,96 @@ describe('Generate Geojson document from bounds', function () {
         itShouldNotHavePolyCoordsInvalid.features.length.should.be.exactly(0).and.be.a.Number;
     });
 })
+
+
+
+describe('Generate Geojson document from radius', function () {
+    var itShouldHavePolyInside, itShouldNotHavePolyCoordsInvalid, itShouldBeNormalRun, itShouldHaveFeaturesUndefined, itShouldHaveParmsUndefined, itShouldBeEmptyAsUndefinedCoords;
+    before(function (done) {
+        var mockData;
+
+        itShouldHaveParmsUndefined = geojson.generateGeoJsonDocRadius(undefined, undefined, undefined, undefined);
+
+
+        mockData = {
+            "name": "ParkingAPI",
+            "type": "FeatureCollection"
+        };
+
+        itShouldHaveFeaturesUndefined = geojson.generateGeoJsonDocRadius(mockData, 10, 10, 20);
+
+        // ** Test relies au points ! **
+        mockData = {
+            "name": "ParkingAPI",
+            "type": "FeatureCollection",
+            "features": []
+        };
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [15, 15]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [14, 15]
+            }
+        });
+
+        itShouldBeNormalRun = geojson.generateGeoJsonDocRadius(mockData, 10, 15, 15);
+
+        mockData.features.length = 0;
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [undefined, undefined]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [undefined, undefined]
+            }
+        });
+
+        itShouldBeEmptyAsUndefinedCoords = geojson.generateGeoJsonDocRadius(mockData, 10, 15, 15);
+        done();
+    })
+
+    it('should be 2 points in document', function () {
+        itShouldBeNormalRun.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldBeNormalRun.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldBeNormalRun.should.have.property("features");
+        itShouldBeNormalRun.features.length.should.be.exactly(2).and.be.a.Number;
+        itShouldBeNormalRun.features[0].geometry.coordinates[0].should.be.exactly(15).and.be.a.Number;
+        itShouldBeNormalRun.features[0].geometry.coordinates[1].should.be.exactly(15).and.be.a.Number;
+        itShouldBeNormalRun.features[1].geometry.coordinates[0].should.be.exactly(14).and.be.a.Number;
+        itShouldBeNormalRun.features[1].geometry.coordinates[1].should.be.exactly(15).and.be.a.Number;
+    });
+
+    it('should be 0 points as features was undefined', function () {
+        itShouldHaveFeaturesUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldHaveFeaturesUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldHaveFeaturesUndefined.should.have.property("features");
+        itShouldHaveFeaturesUndefined.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+
+    it('should be 0 points as parms were undefined', function () {
+        itShouldHaveParmsUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldHaveParmsUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldHaveParmsUndefined.should.have.property("features");
+        itShouldHaveParmsUndefined.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+    it('should be 0 points as coords were undefined', function () {
+        itShouldBeEmptyAsUndefinedCoords.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldBeEmptyAsUndefinedCoords.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldBeEmptyAsUndefinedCoords.should.have.property("features");
+        itShouldBeEmptyAsUndefinedCoords.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+})
