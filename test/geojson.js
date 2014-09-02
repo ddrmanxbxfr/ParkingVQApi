@@ -308,4 +308,11 @@ describe('Retirer les waypoints trop proche selon decimal', function () {
         withoutGeometryProp.should.have.property("features");
         withoutGeometryProp.features.length.should.be.exactly(0).and.be.a.Number;
     });
+
+    it('should be 0 features when coordinates in objects are undefined', function () {
+        withoutCoordinatesProp.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        withoutCoordinatesProp.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        withoutCoordinatesProp.should.have.property("features");
+        withoutCoordinatesProp.features.length.should.be.exactly(0).and.be.a.Number;
+    });
 })
