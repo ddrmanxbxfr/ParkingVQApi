@@ -251,6 +251,14 @@ describe('Retirer les waypoints trop proche selon decimal', function () {
 
         withFeaturesUndefined = geojson.retirerWaypointTropProche(mockData, 10);
 
+        mockData = {
+            "name": "ParkingAPI",
+            "type": "FeatureCollection",
+            "features": []
+        };
+
+        withFeaturesEmpty = geojson.retirerWaypointTropProche(mockData, 10);
+
         done();
     })
 
@@ -266,5 +274,12 @@ describe('Retirer les waypoints trop proche selon decimal', function () {
         withFeaturesUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         withFeaturesUndefined.should.have.property("features");
         withFeaturesUndefined.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+    it('should have valid doc with 0 features when features length is 0', function () {
+        withFeaturesEmpty.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        withFeaturesEmpty.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        withFeaturesEmpty.should.have.property("features");
+        withFeaturesEmpty.features.length.should.be.exactly(0).and.be.a.Number;
     });
 })
