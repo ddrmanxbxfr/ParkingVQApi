@@ -22,20 +22,20 @@ describe('Verifier Si type point', function () {
         // Clearing then adding reals items
         geojsonTest.features.length = 0;
         geojsonTest.features.push({
-            type: "ZZZZ"
+            geometry: {type: "ZZZZ" }
         });
         geojsonTest.features.push({
-            type: "ZZZZ"
+            geometry: {type: "ZZZZ" }
         });
         geojsonTest.features.push({
-            type: "ZZZZ"
+            geometry: {type: "ZZZZ" }
         });
 
         isWithoutPoint = geojson.evaluerSiTypePoint(geojsonTest);
 
         // Adding with point
         geojsonTest.features.push({
-            type: "Point"
+            geometry: {type: "Point" }
         });
         isWithPoint = geojson.evaluerSiTypePoint(geojsonTest);
         done();
