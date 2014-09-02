@@ -136,7 +136,7 @@ describe('Verifier Si type polygon', function () {
 });
 
 describe('Preparation des documents de couchdb', function () {
-    var isWithoutDocProp, isSupposedToBeValid, isWithoutRowsArray, isRowsEmpty, isUndefined;
+    var isWithoutDocProp, isSupposedToBeValid, isWithoutRowsArray, isRowsEmpty, isUndefined, isWithInvalidCouchdbProps;
     before(function (done) {
 
         //doc.rows[iCpt].doc
@@ -154,6 +154,8 @@ describe('Preparation des documents de couchdb', function () {
 
         isWithoutDocProp = geojson.preparerDocumentFeaturesFromCouchView(mockDocument);
 
+        mockDocument.length = 0;
+
         mockDocument.rows.push({
             doc: {
                 _id: 1111,
@@ -161,6 +163,18 @@ describe('Preparation des documents de couchdb', function () {
                 tst: "yo"
             }
         });
+
+        mockDocument.rows.push({
+            doc: {
+                _id: 1111,
+                _rev: 3333,
+                tst: "yo"
+            }
+        });
+
+        isSupposedToBeValid = geojson.preparerDocumentFeaturesFromCouchView(mockDocument);
+
+        mockDocument.rows.length = 0;
 
         mockDocument.rows.push({
             doc: {
@@ -174,6 +188,7 @@ describe('Preparation des documents de couchdb', function () {
                 tst: "yo"
             }
         });
+        isWithInvalidCouchdbProps = geojson.preparerDocumentFeaturesFromCouchView(mockDocument);
 
         done();
     });
@@ -204,6 +219,20 @@ describe('Preparation des documents de couchdb', function () {
         isWithoutDocProp.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
         isWithoutDocProp.should.have.property("features");
         isWithoutDocProp.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+    it('should have 2 documents', function () {
+        isSupposedToBeValid.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        isSupposedToBeValid.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        isSupposedToBeValid.should.have.property("features");
+        isSupposedToBeValid.features.length.should.be.exactly(2).and.be.a.Number;
+    });
+
+    it('should have 2 documents even with invalid couchdbProps', function () {
+        isWithInvalidCouchdbProps.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        isWithInvalidCouchdbProps.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        isWithInvalidCouchdbProps.should.have.property("features");
+        isWithInvalidCouchdbProps.features.length.should.be.exactly(2).and.be.a.Number;
     });
 
 });
