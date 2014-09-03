@@ -655,3 +655,70 @@ describe('Generate Geojson document from radius', function () {
         itShouldBeEmptyAsUndefinedCoords.features.length.should.be.exactly(0).and.be.a.Number;
     });
 })
+
+
+describe('Generate Geojson document from bounds Delta', function () {
+    var itShouldHavePolyInside, itShouldNotHavePolyCoordsInvalid, itShouldBeNormalRun, itShouldHaveFeaturesUndefined, itShouldHaveParmsUndefined, itShouldBeEmptyAsUndefinedCoords;
+    before(function (done) {
+        var mockData, mockPolygon;
+
+        itShouldHaveParmsUndefined = geojson.generateGeoJsonDocBounds(undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined);
+
+
+        mockData = {
+            "name": "ParkingAPI",
+            "type": "FeatureCollection"
+        };
+
+        itShouldHaveFeaturesUndefined = geojson.generateGeoJsonDocBoundsDelta(mockData, 10, 10, 20, 20, 0, 0, 40, 40);
+
+            mockData = {
+            "name": "ParkingAPI",
+            "type": "FeatureCollection",
+                "features": []
+        };
+        mockData.features.length = 0;
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [undefined, undefined]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [undefined, undefined]
+            }
+        });
+
+        itShouldBeEmptyAsUndefinedCoords = geojson.generateGeoJsonDocBoundsDelta(mockData, 10, 10, 20, 20, 0, 0, 40, 40);
+        done();
+    })
+
+    it('should be 0 points as features was undefined', function () {
+        itShouldHaveFeaturesUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldHaveFeaturesUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldHaveFeaturesUndefined.should.have.property("features");
+        itShouldHaveFeaturesUndefined.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+
+    it('should be 0 points as parms were undefined', function () {
+        itShouldHaveParmsUndefined.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldHaveParmsUndefined.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldHaveParmsUndefined.should.have.property("features");
+        itShouldHaveParmsUndefined.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+
+    it('should be 0 points as coords were undefined', function () {
+        itShouldBeEmptyAsUndefinedCoords.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldBeEmptyAsUndefinedCoords.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldBeEmptyAsUndefinedCoords.should.have.property("features");
+        itShouldBeEmptyAsUndefinedCoords.features.length.should.be.exactly(0).and.be.a.Number;
+    });
+})
