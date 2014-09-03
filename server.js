@@ -213,7 +213,7 @@ app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE/:dLatSW/:dLngSW/:dLatNE/:dLngN
     documentToSend = '{"status": "WorkedOnItButFailed"}';
     if (geojson.evaluerSiTypePoint(documentToWorkOnMemory))
     // "this is really a point document"
-        documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBounds(documentToWorkOnMemory, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE));
+        documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBoundsDelta(documentToWorkOnMemory, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE, request.params.dLatSW, request.params.dLngSW, request.params.dLatNE, request.dLngNE));
 
     response.json(documentToSend);
 });
