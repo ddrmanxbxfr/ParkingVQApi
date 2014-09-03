@@ -159,7 +159,7 @@ app.get('/api/parking/:radius/:lat/:lng', function (request, response) {
 app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE', function (request, response) {
     outCorsHeader(request, response);
     var documentToSend;
-    documentToSend = '{"status": "WorkedOnItButFailed"}';
+    documentToSend = {"status": "WorkedOnItButFailed"};
     if (isDocumentLoaded && geojson.evaluerSiTypePoint(documentToWorkOnMemory) || geojson.evaluerSiTypePolygon(documentToWorkOnMemory)) {
         documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBounds(documentToWorkOnMemory, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE));
     }
@@ -215,7 +215,7 @@ app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE', function (request, response)
 app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE/:dLatSW/:dLngSW/:dLatNE/:dLngNE', function (request, response) {
     outCorsHeader(request, response);
     var documentToSend, boundsToCompute;
-    documentToSend = '{"status": "WorkedOnItButFailed"}';
+    documentToSend = {"status": "WorkedOnItButFailed"};
     if (isDocumentLoaded && geojson.evaluerSiTypePoint(documentToWorkOnMemory)) {
         documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBoundsDelta(documentToWorkOnMemory, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE, request.params.dLatSW, request.params.dLngSW, request.params.dLatNE, request.dLngNE));
     }
