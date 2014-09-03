@@ -658,7 +658,7 @@ describe('Generate Geojson document from radius', function () {
 
 
 describe('Generate Geojson document from bounds Delta', function () {
-    var itShouldHavePolyInside, itShouldNotHavePolyCoordsInvalid, itShouldBeNormalRun, itShouldHaveFeaturesUndefined, itShouldHaveParmsUndefined, itShouldBeEmptyAsUndefinedCoords;
+    var  itShouldBeNormalRun, itShouldHaveFeaturesUndefined, itShouldHaveParmsUndefined, itShouldBeEmptyAsUndefinedCoords;
     before(function (done) {
         var mockData, mockPolygon;
 
@@ -676,10 +676,10 @@ describe('Generate Geojson document from bounds Delta', function () {
 
         itShouldHaveFeaturesUndefined = geojson.generateGeoJsonDocBoundsDelta(mockData, 10, 10, 20, 20, 0, 0, 40, 40);
 
-            mockData = {
+        mockData = {
             "name": "ParkingAPI",
             "type": "FeatureCollection",
-                "features": []
+            "features": []
         };
         mockData.features.length = 0;
         mockData.features.push({
@@ -697,6 +697,38 @@ describe('Generate Geojson document from bounds Delta', function () {
         });
 
         itShouldBeEmptyAsUndefinedCoords = geojson.generateGeoJsonDocBoundsDelta(mockData, 10, 10, 20, 20, 0, 0, 40, 40);
+
+        mockData.features.length = 0;
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [0, 5]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [5, 0]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [25, 30]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [30, 25]
+            }
+        });
+
+        itShouldBeNormalRun = geojson.generateGeoJsonDocBoundsDelta(mockData, 10, 10, 20, 20, 0, 0, 40, 40);
         done();
     })
 
@@ -721,4 +753,23 @@ describe('Generate Geojson document from bounds Delta', function () {
         itShouldBeEmptyAsUndefinedCoords.should.have.property("features");
         itShouldBeEmptyAsUndefinedCoords.features.length.should.be.exactly(0).and.be.a.Number;
     });
+
+    it('should have 4 points in doc as they were in the delta bounds', function () {
+        itShouldBeNormalRun.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldBeNormalRun.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldBeNormalRun.should.have.property("features");
+        itShouldBeNormalRun.features.length.should.be.exactly(4).and.be.a.Number;
+        itShouldBeNormalRun.features[0].geometry.coordinates[0].should.be.exactly(0).and.be.a.Number;
+        itShouldBeNormalRun.features[0].geometry.coordinates[1].should.be.exactly(5).and.be.a.Number;
+        itShouldBeNormalRun.features[1].geometry.coordinates[0].should.be.exactly(5).and.be.a.Number;
+        itShouldBeNormalRun.features[1].geometry.coordinates[1].should.be.exactly(0).and.be.a.Number;
+        itShouldBeNormalRun.features[2].geometry.coordinates[0].should.be.exactly(25).and.be.a.Number;
+        itShouldBeNormalRun.features[2].geometry.coordinates[1].should.be.exactly(30).and.be.a.Number;
+        itShouldBeNormalRun.features[3].geometry.coordinates[0].should.be.exactly(30).and.be.a.Number;
+        itShouldBeNormalRun.features[3].geometry.coordinates[1].should.be.exactly(25).and.be.a.Number;
+    })
+
+    it('should have 0 points in doc as they were all in old bounds', function() {
+
+    })
 })
