@@ -127,4 +127,22 @@ describe('Verifier la generation d\'un polygone depuis bounds', function () {
         done();
     })
 
+    it('should have returned a valid rectangle', function () {
+        // Definition du polygone avec 0,0,10,10
+        var expectedRectangle = [[0.0, 0.0],
+                        [10.0, 0.0],
+                        [10.0, 10.0],
+                        [0.0, 10.0],
+                        [0.0, 0.0]];
+        itShouldReturnARectangle[0][0].should.be.exactly(expectedRectangle[0][0]).and.be.a.Number;
+        itShouldReturnARectangle[0][1].should.be.exactly(expectedRectangle[0][1]).and.be.a.Number;
+        itShouldReturnARectangle[1][0].should.be.exactly(expectedRectangle[1][0]).and.be.a.Number;
+        itShouldReturnARectangle[1][1].should.be.exactly(expectedRectangle[1][1]).and.be.a.Number;
+        itShouldReturnARectangle[2][0].should.be.exactly(expectedRectangle[2][0]).and.be.a.Number;
+        itShouldReturnARectangle[2][1].should.be.exactly(expectedRectangle[2][1]).and.be.a.Number;
+        itShouldReturnARectangle[3][0].should.be.exactly(expectedRectangle[3][0]).and.be.a.Number;
+        itShouldReturnARectangle[3][1].should.be.exactly(expectedRectangle[3][1]).and.be.a.Number;
+        itShouldReturnARectangle[4][0].should.be.exactly(expectedRectangle[4][0]).and.be.a.Number;
+        itShouldReturnARectangle[4][1].should.be.exactly(expectedRectangle[4][1]).and.be.a.Number;
+    })
 })
