@@ -104,8 +104,8 @@ function arrondirWpy(roundloc, docToWorkOn) {
  */
 app.get('/api/parking/:radius/:lat/:lng', function (request, response) {
     outCorsHeader(request, response);
-    documentToSend = '{"status": "WorkedOnItButFailed"}';
-    if (geojson.evaluerSiTypePoint(documentToWorkOnMemory))
+    documentToSend = {"status": "WorkedOnItButFailed"};
+    if (isDocumentLoaded && geojson.evaluerSiTypePoint(documentToWorkOnMemory))
     // "this is really a point document"
         documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocRadius(documentToWorkOnMemory, request.params.radius, request.params.lat, request.params.lng));
     else
