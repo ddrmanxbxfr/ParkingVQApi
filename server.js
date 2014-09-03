@@ -160,10 +160,9 @@ app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE', function (request, response)
     outCorsHeader(request, response);
     var documentToSend;
     documentToSend = '{"status": "WorkedOnItButFailed"}';
-    if (geojson.evaluerSiTypePoint(documentToWorkOnMemory) ||  geojson.evaluerSiTypePolygon(documentToWorkOnMemory))
-    // "this is really a point document"
+    if (isDocumentLoaded && geojson.evaluerSiTypePoint(documentToWorkOnMemory) || geojson.evaluerSiTypePolygon(documentToWorkOnMemory)) {
         documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBounds(documentToWorkOnMemory, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE));
-
+    }
     response.json(documentToSend);
 });
 
