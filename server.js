@@ -9,7 +9,7 @@ var application_root = __dirname,
 var nano = require('nano')('http://localhost:5984');
 var dbGeo_name = "parking_api";
 var dbGeo = nano.use(dbGeo_name)
-var documentToWorkOnMemory;
+var documentToWorkOnMemory, isDocumentLoaded;
 
 
 //Create server
@@ -217,9 +217,9 @@ app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE/:dLatSW/:dLngSW/:dLatNE/:dLngN
     outCorsHeader(request, response);
     var documentToSend, boundsToCompute;
     documentToSend = '{"status": "WorkedOnItButFailed"}';
-    if (geojson.evaluerSiTypePoint(documentToWorkOnMemory))
-    // "this is really a point document"
+    if (isDocumentLoaded && geojson.evaluerSiTypePoint(documentToWorkOnMemory)) {
         documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBoundsDelta(documentToWorkOnMemory, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE, request.params.dLatSW, request.params.dLngSW, request.params.dLatNE, request.dLngNE));
+    }
 
     response.json(documentToSend);
 });
@@ -235,6 +235,7 @@ function loadWaypointInMemory() {
             documentToWorkOnMemory = geojson.preparerDocumentFeaturesFromCouchView(doc);
             console.log('Nb occurence dataset : ' + documentToWorkOnMemory.features.length);
             console.log('Finished loading waypoints in memory');
+            isDocumentLoaded = true;
         } else {}
     });
 }
@@ -244,6 +245,7 @@ function loadWaypointInMemory() {
 var port = 4711;
 app.listen(port, function () {
     "use strict";
+    isDocumentLoaded = false;
     loadWaypointInMemory();
     console.log('Express server listening on port %d in %s mode', port, app.settings.env);
 });
