@@ -121,9 +121,11 @@ describe('Verifier presence d\'un polygone dans un polygone', function () {
 });
 
 describe('Verifier la generation d\'un polygone depuis bounds', function () {
-    var itShouldReturnARectangle;
+    var itShouldReturnARectangle, itShouldReturnAEmptyRectangleOnUndefinedParams, itShouldReturnAEmptyRectangleOnInvalidParams;
     before(function (done) {
         itShouldReturnARectangle = calculs.generatePolyFromBounds(0, 0, 10, 10);
+        itShouldReturnAEmptyRectangleOnUndefinedParams = calculs.generatePolyFromBounds(undefined, undefined, undefined, undefined);
+        itShouldReturnAEmptyRectangleOnInvalidParams = calculs.generatePolyFromBounds(10, "abd", 30, "abc");
         done();
     })
 
@@ -144,5 +146,41 @@ describe('Verifier la generation d\'un polygone depuis bounds', function () {
         itShouldReturnARectangle[3][1].should.be.exactly(expectedRectangle[3][1]).and.be.a.Number;
         itShouldReturnARectangle[4][0].should.be.exactly(expectedRectangle[4][0]).and.be.a.Number;
         itShouldReturnARectangle[4][1].should.be.exactly(expectedRectangle[4][1]).and.be.a.Number;
+    });
+
+    it('should return a empty poly when undefined params', function () {
+        var expectedRectangle = [[0, 0],
+                        [0, 0],
+                        [0, 0],
+                        [0, 0],
+                        [0, 0]];
+        itShouldReturnAEmptyRectangleOnUndefinedParams[0][0].should.be.exactly(expectedRectangle[0][0]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnUndefinedParams[0][1].should.be.exactly(expectedRectangle[0][1]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnUndefinedParams[1][0].should.be.exactly(expectedRectangle[1][0]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnUndefinedParams[1][1].should.be.exactly(expectedRectangle[1][1]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnUndefinedParams[2][0].should.be.exactly(expectedRectangle[2][0]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnUndefinedParams[2][1].should.be.exactly(expectedRectangle[2][1]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnUndefinedParams[3][0].should.be.exactly(expectedRectangle[3][0]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnUndefinedParams[3][1].should.be.exactly(expectedRectangle[3][1]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnUndefinedParams[4][0].should.be.exactly(expectedRectangle[4][0]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnUndefinedParams[4][1].should.be.exactly(expectedRectangle[4][1]).and.be.a.Number;
+    })
+
+    it('should return a empty poly when params are not numbers', function () {
+        var expectedRectangle = [[0, 0],
+                        [0, 0],
+                        [0, 0],
+                        [0, 0],
+                        [0, 0]];
+        itShouldReturnAEmptyRectangleOnInvalidParams[0][0].should.be.exactly(expectedRectangle[0][0]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnInvalidParams[0][1].should.be.exactly(expectedRectangle[0][1]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnInvalidParams[1][0].should.be.exactly(expectedRectangle[1][0]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnInvalidParams[1][1].should.be.exactly(expectedRectangle[1][1]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnInvalidParams[2][0].should.be.exactly(expectedRectangle[2][0]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnInvalidParams[2][1].should.be.exactly(expectedRectangle[2][1]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnInvalidParams[3][0].should.be.exactly(expectedRectangle[3][0]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnInvalidParams[3][1].should.be.exactly(expectedRectangle[3][1]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnInvalidParams[4][0].should.be.exactly(expectedRectangle[4][0]).and.be.a.Number;
+        itShouldReturnAEmptyRectangleOnInvalidParams[4][1].should.be.exactly(expectedRectangle[4][1]).and.be.a.Number;
     })
 })
