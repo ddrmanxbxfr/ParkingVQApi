@@ -735,28 +735,28 @@ describe('Generate Geojson document from bounds Delta', function () {
         mockData.features.push({
             geometry: {
                 type: "Point",
-                coordinates: [0, 15]
+                coordinates: [10, 15]
             }
         });
 
         mockData.features.push({
             geometry: {
                 type: "Point",
-                coordinates: [15, 0]
+                coordinates: [15, 10]
             }
         });
 
         mockData.features.push({
             geometry: {
                 type: "Point",
-                coordinates: [19, 30]
+                coordinates: [19, 18]
             }
         });
 
         mockData.features.push({
             geometry: {
                 type: "Point",
-                coordinates: [30, 19]
+                coordinates: [19, 19]
             }
         });
 
