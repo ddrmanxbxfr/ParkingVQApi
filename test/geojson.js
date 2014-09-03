@@ -658,7 +658,7 @@ describe('Generate Geojson document from radius', function () {
 
 
 describe('Generate Geojson document from bounds Delta', function () {
-    var  itShouldBeNormalRun, itShouldHaveFeaturesUndefined, itShouldHaveParmsUndefined, itShouldBeEmptyAsUndefinedCoords;
+    var itShouldBeNormalRun, itShouldHaveAllItemsInOldBounds, itShouldHaveFeaturesUndefined, itShouldHaveParmsUndefined, itShouldBeEmptyAsUndefinedCoords;
     before(function (done) {
         var mockData, mockPolygon;
 
@@ -729,6 +729,39 @@ describe('Generate Geojson document from bounds Delta', function () {
         });
 
         itShouldBeNormalRun = geojson.generateGeoJsonDocBoundsDelta(mockData, 10, 10, 20, 20, 0, 0, 40, 40);
+
+        mockData.features.length = 0;
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [0, 15]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [15, 0]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [19, 30]
+            }
+        });
+
+        mockData.features.push({
+            geometry: {
+                type: "Point",
+                coordinates: [30, 19]
+            }
+        });
+
+        itShouldHaveAllItemsInOldBounds = geojson.generateGeoJsonDocBoundsDelta(mockData, 10, 10, 20, 20, 0, 0, 40, 40);
+
         done();
     })
 
@@ -769,7 +802,10 @@ describe('Generate Geojson document from bounds Delta', function () {
         itShouldBeNormalRun.features[3].geometry.coordinates[1].should.be.exactly(25).and.be.a.Number;
     })
 
-    it('should have 0 points in doc as they were all in old bounds', function() {
-
+    it('should have 0 points in doc as they were all in old bounds', function () {
+        itShouldHaveAllItemsInOldBounds.should.have.property("name").and.be.exactly("ParkingAPI").and.be.a.String;
+        itShouldHaveAllItemsInOldBounds.should.have.property("type").and.be.exactly("FeatureCollection").and.be.a.String;
+        itShouldHaveAllItemsInOldBounds.should.have.property("features");
+        itShouldHaveAllItemsInOldBounds.features.length.should.be.exactly(0).and.be.a.Number;
     })
 })
