@@ -162,6 +162,63 @@ app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE', function (request, response)
 });
 
 
+/**
+ * @api {get} /api/parking/:latSW/:lngSW/:latNE/:lngNE/:dLatSW/:dLngSW/:dLatNE/:dLngNE Obtenir les document selon les bounds fournis.
+ * @apiName GetParkingDetailBoundsDelta
+ * @apiGroup Parking
+ *
+ * @apiDescription Les document à été calculés à partir d'un delta de bounds à condition que le jeu de données soit fournit en format points.
+ *
+ * @apiParam {String} id Nom du jeu de donnée.
+ * @apiParam {Number} latSW Point de latitude South West.
+ * @apiParam {Number} lngSW Point de longitude South West.
+ * @apiParam {Number} latNE Point de latitude Nord East.
+ * @apiParam {Number} lngNE Point de longitude Nord East.
+ * @apiParam {Number} dLatSW Deuxieme point de latitude South West.
+ * @apiParam {Number} dLngSW Deuxieme point de longitude South West.
+ * @apiParam {Number} dLatNE Deuxieme point de latitude Nord East.
+ * @apiParam {Number} dLngNE Deuxieme point de longitude Nord East.
+ * @apiParam {Integer} [?roundloc=] Arrondir les waypoints au nombre spécifié.
+ *
+ * @apiSuccess {GeoJson} documentFeatures Document formatté avec la liste de waypoints selon le périmètre.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ * {
+ *   "_id": "b6191e110019328d4c8b2bedff000a7a",
+ *   "_rev": "1-aabffa12807d084ccbcd63f7c51b0533",
+ *   "name": "PARCOMETRE",
+ *   "type": "FeatureCollection",
+ *   "features": [
+ *     {
+ *       "type": "Feature",
+ *       "geometry": {
+ *         "type": "Point",
+ *         "coordinates": [
+ *           -71.2217178685479,
+ *           46.803835920695
+ *         ]
+ *       },
+ *       "properties": {
+ *         "ID": "300070"
+ *       }
+ *     }
+ * 	]
+ * }
+ *
+ */
+app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE/:dLatSW/:dLngSW/:dLatNE/:dLngNE', function (request, response) {
+    outCorsHeader(request, response);
+    var documentToSend, boundsToCompute;
+    documentToSend = '{"status": "WorkedOnItButFailed"}';
+    if (geojson.evaluerSiTypePoint(documentToWorkOnMemory) ||  geojson.evaluerSiTypePolygon(documentToWorkOnMemory))
+    // "this is really a point document"
+        documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBounds(documentToWorkOnMemory, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE));
+
+    response.json(documentToSend);
+});
+
+
 function loadWaypointInMemory() {
     dbGeo.view('nodejs', 'keys', {
         include_docs: true,
