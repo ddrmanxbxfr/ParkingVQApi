@@ -18,6 +18,13 @@ var app = express();
 // Configure server
 app.configure(function () {
     "use strict";
+
+    // Compress if we can !
+    app.use(express.compress());
+
+    // JSON :)
+    app.use(express.json());
+
     //parses request body and populates request.body
     app.use(express.bodyParser());
 
@@ -27,8 +34,7 @@ app.configure(function () {
     //perform route lookup based on url and HTTP method
     app.use(app.router);
 
-    // Compress if we can !
-    app.use(express.compress());
+
 
     // Set json spaces at 0 !
     app.set('json spaces', 0);
