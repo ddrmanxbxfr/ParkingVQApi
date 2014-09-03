@@ -19,7 +19,7 @@ describe('Presence d\'un point dans le rayon', function () {
     before(function (done) {
         rayonPlusPetitQueDistance = calculs.isPointInRadius(1500, 10, 10, 20, 20);
         rayonPlusGrandQueDistance = calculs.isPointInRadius(2000, 10, 10, 20, 20);
-        pointSurLeMemeRayon = calculs.isPointInRadius(10,10,10,10,10);
+        pointSurLeMemeRayon = calculs.isPointInRadius(10, 10, 10, 10, 10);
         done();
     })
 
@@ -31,7 +31,7 @@ describe('Presence d\'un point dans le rayon', function () {
         rayonPlusGrandQueDistance.should.be.exactly(true).and.be.a.Boolean;
     });
 
-     it('should be in radius if point is at the same place than src loc', function () {
+    it('should be in radius if point is at the same place than src loc', function () {
         pointSurLeMemeRayon.should.be.exactly(true).and.be.a.Boolean;
     });
 });
@@ -98,8 +98,8 @@ describe('Verifier presence d\'un polygone dans un polygone', function () {
 
         isPolyInside = calculs.isPolyInBounds(polyTest, 4, 4, 5, 5);
         isPolyOutside = calculs.isPolyInBounds(polyTest, 20, 20, 15, 15);
-        isPolyPartiallyInsideFromNorth = calculs.isPolyInBounds(polyTest, -10,-10,0.2,0.2);
-        isPolyPartiallyInsideFromSouth = calculs.isPolyInBounds(polyTest,9,9,20,20);
+        isPolyPartiallyInsideFromNorth = calculs.isPolyInBounds(polyTest, -10, -10, 0.2, 0.2);
+        isPolyPartiallyInsideFromSouth = calculs.isPolyInBounds(polyTest, 9, 9, 20, 20);
         done();
     })
 
@@ -111,11 +111,20 @@ describe('Verifier presence d\'un polygone dans un polygone', function () {
         isPolyOutside.should.be.exactly(false).and.be.a.Boolean;
     })
 
-    it('should have poly inside from north east', function() {
-      isPolyPartiallyInsideFromNorth.should.be.exactly(true).and.be.a.Boolean;
+    it('should have poly inside from north east', function () {
+        isPolyPartiallyInsideFromNorth.should.be.exactly(true).and.be.a.Boolean;
     })
 
-    it('should have poly inside from south west', function() {
-      isPolyPartiallyInsideFromSouth.should.be.exactly(true).and.be.a.Boolean;
+    it('should have poly inside from south west', function () {
+        isPolyPartiallyInsideFromSouth.should.be.exactly(true).and.be.a.Boolean;
     })
 });
+
+describe('Verifier la generation d\'un polygone depuis bounds', function () {
+    var itShouldReturnARectangle;
+    before(function (done) {
+        itShouldReturnARectangle = calculs.generatePolyFromBounds(0, 0, 10, 10);
+        done();
+    })
+
+})
