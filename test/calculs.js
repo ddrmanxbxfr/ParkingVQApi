@@ -134,8 +134,7 @@ describe('Verifier la generation d\'un polygone depuis bounds', function () {
         var expectedRectangle = [[0.0, 0.0],
                         [10.0, 0.0],
                         [10.0, 10.0],
-                        [0.0, 10.0],
-                        [0.0, 0.0]];
+                        [0.0, 10.0]];
         itShouldReturnARectangle[0][0].should.be.exactly(expectedRectangle[0][0]).and.be.a.Number;
         itShouldReturnARectangle[0][1].should.be.exactly(expectedRectangle[0][1]).and.be.a.Number;
         itShouldReturnARectangle[1][0].should.be.exactly(expectedRectangle[1][0]).and.be.a.Number;
@@ -144,13 +143,10 @@ describe('Verifier la generation d\'un polygone depuis bounds', function () {
         itShouldReturnARectangle[2][1].should.be.exactly(expectedRectangle[2][1]).and.be.a.Number;
         itShouldReturnARectangle[3][0].should.be.exactly(expectedRectangle[3][0]).and.be.a.Number;
         itShouldReturnARectangle[3][1].should.be.exactly(expectedRectangle[3][1]).and.be.a.Number;
-        itShouldReturnARectangle[4][0].should.be.exactly(expectedRectangle[4][0]).and.be.a.Number;
-        itShouldReturnARectangle[4][1].should.be.exactly(expectedRectangle[4][1]).and.be.a.Number;
     });
 
     it('should return a empty poly when undefined params', function () {
         var expectedRectangle = [[0, 0],
-                        [0, 0],
                         [0, 0],
                         [0, 0],
                         [0, 0]];
@@ -162,13 +158,10 @@ describe('Verifier la generation d\'un polygone depuis bounds', function () {
         itShouldReturnAEmptyRectangleOnUndefinedParams[2][1].should.be.exactly(expectedRectangle[2][1]).and.be.a.Number;
         itShouldReturnAEmptyRectangleOnUndefinedParams[3][0].should.be.exactly(expectedRectangle[3][0]).and.be.a.Number;
         itShouldReturnAEmptyRectangleOnUndefinedParams[3][1].should.be.exactly(expectedRectangle[3][1]).and.be.a.Number;
-        itShouldReturnAEmptyRectangleOnUndefinedParams[4][0].should.be.exactly(expectedRectangle[4][0]).and.be.a.Number;
-        itShouldReturnAEmptyRectangleOnUndefinedParams[4][1].should.be.exactly(expectedRectangle[4][1]).and.be.a.Number;
     })
 
     it('should return a empty poly when params are not numbers', function () {
         var expectedRectangle = [[0, 0],
-                        [0, 0],
                         [0, 0],
                         [0, 0],
                         [0, 0]];
@@ -180,7 +173,5 @@ describe('Verifier la generation d\'un polygone depuis bounds', function () {
         itShouldReturnAEmptyRectangleOnInvalidParams[2][1].should.be.exactly(expectedRectangle[2][1]).and.be.a.Number;
         itShouldReturnAEmptyRectangleOnInvalidParams[3][0].should.be.exactly(expectedRectangle[3][0]).and.be.a.Number;
         itShouldReturnAEmptyRectangleOnInvalidParams[3][1].should.be.exactly(expectedRectangle[3][1]).and.be.a.Number;
-        itShouldReturnAEmptyRectangleOnInvalidParams[4][0].should.be.exactly(expectedRectangle[4][0]).and.be.a.Number;
-        itShouldReturnAEmptyRectangleOnInvalidParams[4][1].should.be.exactly(expectedRectangle[4][1]).and.be.a.Number;
     })
 })
