@@ -170,8 +170,21 @@ app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE', function (request, response)
     };
     if (isDocumentLoaded && geojson.evaluerSiTypePoint(documentToWorkOnMemory) || geojson.evaluerSiTypePolygon(documentToWorkOnMemory)) {
         documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBounds(documentToWorkOnMemory, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE));
+
     }
     response.json(documentToSend);
+});
+
+
+
+app.get('/api/redis_couch/:latSW/:lngSW/:latNE/:lngNE', function (request, response) {
+    outCorsHeader(request, response);
+    var documentToSend;
+    documentToSend = {
+        "status": "WorkedOnItButFailed"
+    };
+
+    documentToSend = geojson.computeBoundsFromGeoHashAndCouch(response, dbGeo, proximity, request.query.roundloc, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE);
 });
 
 
