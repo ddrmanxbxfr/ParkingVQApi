@@ -14,7 +14,7 @@ var documentToWorkOnMemory, isDocumentLoaded;
 var redis = require('redis');
 var client = redis.createClient();
 var proximity = require('geo-proximity').initialize(client, "geo:parking_api");
-
+var redisDocsParsedByCouchId;
 
 //Create server
 var app = express();
@@ -184,7 +184,7 @@ app.get('/api/redis_couch/:latSW/:lngSW/:latNE/:lngNE', function (request, respo
         "status": "WorkedOnItButFailed"
     };
 
-    documentToSend = geojson.computeBoundsFromGeoHashAndCouch(response, dbGeo, proximity, request.query.roundloc, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE);
+    documentToSend = geojson.computeBoundsFromGeoHashAndCouch(redisDocsParsedByCouchId, response, dbGeo, proximity, request.query.roundloc, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE);
 });
 
 
@@ -256,15 +256,18 @@ function loadWaypointInMemory() {
         if (!err) {
             console.log('Starting dataload for redis client GeoHash service');
             redisGeoHashLocs = geojson.preparerRedisPourGeohash(doc);
+            redisDocsParsedByCouchId = geojson.preparerAssociativeArrayPourRedis(doc);
             proximity.addCoordinates(redisGeoHashLocs, function (err, reply) {
                 if (err) console.error(err);
                 console.log("REDIS GeoHash ADD successful:", reply)
             });
 
-            documentToWorkOnMemory = geojson.preparerDocumentFeaturesFromCouchView(doc);
-            console.log('Nb occurence dataset : ' + documentToWorkOnMemory.features.length);
+
+
+            //documentToWorkOnMemory = geojson.preparerDocumentFeaturesFromCouchView(doc);
+           // console.log('Nb occurence dataset : ' + documentToWorkOnMemory.features.length);
             console.log('Finished loading waypoints in memory');
-            isDocumentLoaded = true;
+            isDocumentLoaded = false;
         } else {}
     });
 }
