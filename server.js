@@ -175,7 +175,7 @@ app.get('/api/parking/:latSW/:lngSW/:latNE/:lngNE', function (request, response)
         documentToSend = arrondirWpy(request.query.roundloc, geojson.generateGeoJsonDocBounds(documentToWorkOnMemory, request.params.latSW, request.params.lngSW, request.params.latNE, request.params.lngNE));
 
     }
-    response.json(documentToSend);
+    response.json(rjson.pack(documentToSend));
 });
 
 /*
